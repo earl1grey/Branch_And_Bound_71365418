@@ -5,10 +5,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 from .desicion_logic import Logic
 
-class Main_Menu:
-    def not_exist(self):
-        print("Функция не существует")
-        
+class Main_Menu:       
     def __init__(self, root):
         self.launcher = root # Приложению присваивается значение root
         self.launcher.title("Задача коммивояжера") # Окну присваивается название
@@ -110,11 +107,11 @@ class Main_Menu:
         except ValueError: # Ошибка при неправильном значении
             messagebox.showerror("Произошла ошибка", "Введите корректный размер матрицы!") # Вызов сообщения с ошибкой         
     
-    def back(self): # Функция для окна с заполнением матрицы
+    def back(self): # Метод для окна с заполнением матрицы
         self.matrix_setup.place_forget() # Сокрытие меню решения
         self.main_menu.pack(fill='both', expand=True) # Вызов главного меню
 
-    def matrix_entry(self): # Функция заполнения матрицы
+    def matrix_entry(self): # Метод заполнения матрицы
             matrix_size = len(self.elements) # Считывание количества элементов матрицы
             matrix = np.zeros((matrix_size, matrix_size), dtype=float) # Возвращение массива, заполненного нулями
             
@@ -127,7 +124,7 @@ class Main_Menu:
                                 matrix[i][j] = float('inf') # Присвоение нулевым ячейкам бесконечности
                             else:
                                 if cell.strip() == "": # Проверка на пустое значение
-                                    messagebox.showerror(f"Пустое значение в ячейке ({i+1}, {j+1})") # Вывод ошибки
+                                    messagebox.showerror("Ошибка","Пустое значение в ячейке!") # Вывод ошибки
                                     return
                                 matrix[i][j] = float(cell) # Преобразование значения и присвоение его к ячейке
             except ValueError:
@@ -147,13 +144,14 @@ class Main_Menu:
                             continue
 
             matrix_decision = Logic(matrix) # Присвоение matrix_decision класса Logic для избежания ошибки
-            path, value = matrix_decision.solve() # Выполнение функции
+            path, value = matrix_decision.solve() # Выполнение метода
 
             letter = [chr(65 + i) for i in path] # Преобразование числа в букву
             log = f"№{len(self.history) + 1}: {' -> '.join(letter)}; Стоимость: {int(value)}" # Маска результата для сохранения решений 
             self.history.append(log) # Запись сохранения
 
             messagebox.showinfo("Результат", f"Полный путь: {' -> '.join(letter)}; Стоимость: {int(value)}") # Показ результата
+            
             self.matrix_visualization(matrix_decision.decision_tree, optimal_path=path) # Вывод дерева решений
 
     def matrix_visualization(self, decision_tree, optimal_path=None):
@@ -201,7 +199,7 @@ class Main_Menu:
                     path_part = str(node) # Иначе полное название узла
                 label_parts.append(path_part) # Запись полученного названия узла в список
                 if node in lower_bounds: # Проверка на наличие нижней границы
-                    label_parts.append(f"LB: {lower_bounds[node]}") # Запись нижней границы в список
+                    label_parts.append(f"H = {lower_bounds[node]}") # Запись нижней границы в список
                 node_labels[node] = "\n".join(label_parts) # Объединение подписей
 
             dot_color = [] # Список для цветов узлов
@@ -256,8 +254,3 @@ class Main_Menu:
             
             close_button = tk.Button(save_history_window, text="Закрыть", command=save_history_window.destroy, font=("Arial", 14)) # Кнопка закрытия
             close_button.pack(pady=10) # Отображение в окне
-
-# if __name__ == "__main__": # Условие запуска
-#     root = tk.Tk()
-#     app = Main_Menu(root)
-#     root.mainloop()

@@ -52,7 +52,7 @@ class Logic:
                     if not self.decision_tree.has_edge(previous_point, current_point): # Проверяет существование направленного ребра
                         self.decision_tree.add_edge(previous_point, current_point) # Добавление ребра
                     
-                    self.choosing_path_value(new_path, total_value + re_value, new_re_matrix, current_point) # Вызов функции для продолжения пути
+                    self.choosing_path_value(new_path, total_value + re_value, new_re_matrix, current_point) # Вызов метода для продолжения пути
 
     def solve(self):
         re_matrix, re_value = self.matrix_reduction(self.matrix) # Присваивание редуцированной матрицы
@@ -62,24 +62,3 @@ class Logic:
         self.choosing_path_value([0], re_value, re_matrix, "Начало") # Поиск пути
 
         return self.optimal_path, self.optimal_value  # Возвращаем только путь и стоимость
-
-class Testing(): # Проверка
-    def test(self):
-        matrix = [  # Матрица
-            [0, 5, 15, 7],
-            [9, 0, 20, 10],
-            [15, 20, 0, 11],
-            [12, 6, 8, 0]
-        ]
-
-        start = Logic(matrix) # Загрузка матрицы
-        path, value = start.solve() # Запуск функции решения
-        
-        full_path = " -> ".join([chr(65 + point) for point in path]) # Преобразование данных в путь
-
-        print(f"Полный путь: {full_path}") # Вывод полного минимального пути
-        print(f"Минимальная стоимость пути: {value}") # Вывод минимальной стоимости
-
-if __name__ == "__main__": # Запуск тестирования
-    decision = Testing() # Присваивание класса для избежания ошибки
-    decision.test() # Запуск теста
